@@ -446,40 +446,23 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback {
 	}
 
 	/**+
-	 * Rotate and blurs the skybox view in the main menu
+	 * Rotate the skybox view in the main menu
 	 */
 	private void rotateAndBlurSkybox(float parFloat1) {
 		this.mc.getTextureManager().bindTexture(backgroundTexture);
 		EaglercraftGPU.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		EaglercraftGPU.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		EaglercraftGPU.glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 256, 256);
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-		GlStateManager.colorMask(true, true, true, false);
 		Tessellator tessellator = Tessellator.getInstance();
 		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-		GlStateManager.disableAlpha();
-		byte b0 = 3;
-
-		for (int i = 0; i < b0; ++i) {
-			float f = 1.0F / (float) (i + 1);
-			int j = this.width;
-			int k = this.height;
-			float f1 = (float) (i - b0 / 2) / 256.0F;
-			worldrenderer.pos((double) j, (double) k, (double) this.zLevel).tex((double) (0.0F + f1), 1.0D)
-					.color(1.0F, 1.0F, 1.0F, f).endVertex();
-			worldrenderer.pos((double) j, 0.0D, (double) this.zLevel).tex((double) (1.0F + f1), 1.0D)
-					.color(1.0F, 1.0F, 1.0F, f).endVertex();
-			worldrenderer.pos(0.0D, 0.0D, (double) this.zLevel).tex((double) (1.0F + f1), 0.0D)
-					.color(1.0F, 1.0F, 1.0F, f).endVertex();
-			worldrenderer.pos(0.0D, (double) k, (double) this.zLevel).tex((double) (0.0F + f1), 0.0D)
-					.color(1.0F, 1.0F, 1.0F, f).endVertex();
-		}
-
+		worldrenderer.pos((double) this.width, (double) this.height, (double) this.zLevel).tex(1.0D, 1.0D).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		worldrenderer.pos((double) this.width, 0.0D, (double) this.zLevel).tex(1.0D, 0.0D).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		worldrenderer.pos(0.0D, 0.0D, (double) this.zLevel).tex(0.0D, 0.0D).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		worldrenderer.pos(0.0D, (double) this.height, (double) this.zLevel).tex(0.0D, 1.0D).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
 		tessellator.draw();
-		GlStateManager.enableAlpha();
-		GlStateManager.colorMask(true, true, true, true);
+		GlStateManager.disableBlend();
 	}
 
 	/**+
